@@ -11,7 +11,6 @@ export default class Counter extends Component {
     const { counter } = this.$state;
     return `
       <div>
-        <h2>Counter Component</h2>
         <div>${counter}</div>
         <button class='up'>증가</button>
         <button class='down'>감소</button>

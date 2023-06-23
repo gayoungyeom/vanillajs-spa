@@ -1,22 +1,59 @@
 import Component from './core/Component.js';
-import CounterPage from './pages/CounterPage.js';
-import FetchPage from './pages/FetchPage.js';
-
+import createPages from './pages/index.js';
 export default class App extends Component {
+  setup() {
+    this.$state = {
+      routes: [],
+    };
+  }
+
   template() {
     return `
-      <main>
-        <section data-component="counter"></section>
-        <section data-component="fetch"></section>
-      </main>
+    <header>
+      <a href="#/">Home</a>
+      <a href="#/counter">Counter</a>
+      <a href="#/fetch">Fetch</a>
+    </header>
+    <main></main>
     `;
   }
 
   mounted() {
-    const $counter = this.$target.querySelector('[data-component="counter"]');
-    new CounterPage($counter);
+    const $main = this.$target.querySelector('main');
+    const pages = createPages($main);
 
-    const $fetch = this.$target.querySelector('[data-component="fetch"]');
-    new FetchPage($fetch);
+    //라우트 페이지 설정
+    this.$state.routes.push({ fragment: '#/', component: pages.home });
+    this.$state.routes.push({
+      fragment: '#/counter',
+      component: pages.counter,
+    });
+    this.$state.routes.push({ fragment: '#/fetch', component: pages.fetch });
+
+    //현재 URL 체크
+    const checkRoutes = () => {
+      const currentRoute = this.$state.routes.find((route) => {
+        return route.fragment === window.location.hash;
+      });
+
+      if (!currentRoute) {
+        //redirect to home
+        window.location.href = './#';
+        this.$state.routes[0].component();
+        return;
+      }
+
+      currentRoute.component();
+    };
+
+    //URL 변경 이벤트
+    window.addEventListener('hashchange', checkRoutes);
+
+    if (!window.location.hash) {
+      window.location.hash = '#/';
+    }
+
+    //초기 렌더링
+    checkRoutes();
   }
 }
