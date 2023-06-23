@@ -1,0 +1,25 @@
+/* 태그 */
+h1 {
+  color: rgb(58, 42, 163);
+}
+
+/* data-* 속성 */
+div[data-component='counter-up'] {
+  font-size: 24px;
+}
+
+/* class */
+.up,
+.down {
+  color: white;
+  background-color: rgb(58, 42, 163);
+  border: 2px solid rgb(58, 42, 163);
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.up:hover,
+.down:hover {
+  font-size: 14px;
+}
